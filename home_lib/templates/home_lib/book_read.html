@@ -1,0 +1,44 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+
+       <div class="col">
+            <section class="window_table w-100">
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table class="table table-light table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Read</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Year</th>
+                                <th>Language</th>
+                                <th>Read date</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%  if object_list.count == 0 %}
+                                <td colspan="5">There are no books in the database yet.</td>
+                            {% endif %}
+                             {% for book in object_list %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td><span class="glyphicon glyphicon-ok"></span></td>
+                                        <td>{{book.title}}</td>
+                                        <td>{{book.author}}</td>
+                                        <td>{{book.year}}</td>
+                                        <td>{{book.get_language_display }}</td>
+                                        <td>{{ book.read_timestamp|date:"d M, Y" }}</td>
+                                        <td><a class="delete_link" href={% url 'book-read-delete' pk=book.id %}>Delete</a></td>
+                                    </tr>
+                             {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}

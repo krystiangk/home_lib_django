@@ -1,0 +1,70 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-pixel-width-580">
+                <section class="window_table">
+                <form class="insert_window" method="GET">
+                    <h1><span class="glyphicon glyphicon-search" aria-hidden="true"></span>Search</h1>
+                    <h3>Please fill one or more entries to search in database</h3>
+
+                    {% for field in form %}
+                        <p class="form__group">
+                            <label class="form__label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                            {{ field }}
+                        </p>
+                    {% endfor %}
+
+                    <button class="button" type="submit" name="submit_button" value="add_book"> Submit </button>
+                </form>
+                </section>
+            </div>
+           <div class="col">
+                <section class="window_table w-100">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <table class="table table-light table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Read</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Year</th>
+                                    <th>Language</th>
+                                    <th>Mark as</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%  if object_list.count == 0 %}
+                                    <td colspan="5">There are no books meeting given criteria..</td>
+                                {% endif %}
+                                 {% for book in object_list %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{% if book.read %}
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                                {% endif %}</td>
+                                            <td>{{book.title}}</td>
+                                            <td>{{book.author}}</td>
+                                            <td>{{book.year}}</td>
+                                            <td>{{book.get_language_display}}</td>
+                                            <td><a class="mark_read_link" href={% url 'book-mark' pk=book.id %}>
+                                                        {% if book.read %}
+                                                        Mark as unread
+                                                        {% else %}
+                                                        Mark as read
+                                                        {% endif %}
+                                                    </a></td>
+                                            <td><a class="delete_link" href={% url 'book-delete' pk=book.id %}>Delete</a></td>
+                                        </tr>
+                                 {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

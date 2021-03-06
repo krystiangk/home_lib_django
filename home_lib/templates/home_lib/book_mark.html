@@ -1,0 +1,47 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-pixel-width-580">
+                <section class="window_table">
+                <form class="insert_window" method="POST">
+                    {% csrf_token %}
+                    <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Mark a book</h1>
+                    <h3>Are you sure you want to mark this book as
+                        {% if object.read %}
+                        unread
+                        {% else %}
+                        read
+                        {% endif %}
+                        ?</h3>
+
+                        <p class="form__group">
+                            <label class="form__label" for="book_title">Title:</label>
+                            <input class="input" value="{{ object.title }}" id='book_title' readonly>
+                        </p>
+                        <p class="form__group">
+                            <label class="form__label" for="book_title">Author:</label>
+                            <input class="input" value="{{ object.author }}" id='book_title' readonly>
+                        </p>
+                        <p class="form__group">
+                            <label class="form__label" for="book_title">Year:</label>
+                            <input class="input" value="{{ object.year }}" id='book_title' readonly>
+                        </p>
+                        <p class="form__group">
+                            <label class="form__label" for="book_title">Language:</label>
+                            <input class="input" value="{{ object.get_language_display }}" id='book_title' readonly>
+                        </p>
+                    <button class="button" type="submit" name="submit_button" value="add_book"> Yes, mark as
+                        {% if object.read %}
+                        unread
+                        {% else %}
+                        read
+                        {% endif %}
+                    </button>
+                </form>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

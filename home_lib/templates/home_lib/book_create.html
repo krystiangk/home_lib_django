@@ -1,0 +1,65 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-pixel-width-580">
+                <section class="window_table">
+                <form class="insert_window" method="POST">
+                    {% csrf_token %}
+                    <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add a new book</h1>
+                    <h3>Please fill the entries to insert a new book to the database</h3>
+
+                    {% for error in form.non_field_errors %}
+                        <div class="row">
+                            {{ error|escape }}
+                        </div>
+                    {% endfor %}
+
+                    {% for field in form %}
+                        {{  field.errors|escape }}
+                        <p class="form__group">
+                            <label class="form__label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                            {{ field }}
+                        </p>
+                    {% endfor %}
+
+                    <button class="button" type="submit" name="submit_button" value="add_book"> Submit </button>
+                </form>
+                </section>
+            </div>
+           <div class="col">
+                <section class="window_table w-100">
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <table class="table table-light table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Year</th>
+                                    <th>Language</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {%  if object_list.count == 0 %}
+                                    <td colspan="5">There are no books in the database yet.</td>
+                                {% endif %}
+                                 {% for book in object_list %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{book.title}}</td>
+                                            <td>{{book.author}}</td>
+                                            <td>{{book.year}}</td>
+                                            <td>{{book.get_language_display }}</td>
+                                        </tr>
+                                 {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
