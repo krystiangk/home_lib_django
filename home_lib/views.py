@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
-from .models import Book
-from .forms import BookCreateForm, BookSearchForm
+from .models import Book, Wishlist
+from .forms import BookCreateForm, BookSearchForm, BookMarkReadForm, BookWishlistForm
 from django.views.generic.edit import FormMixin
 from django.db.models import Q
 from django.urls import reverse
@@ -71,10 +71,11 @@ class BookReadDeleteView(DeleteView):
 
 class BookMarkReadView(UpdateView):
     model = Book
-    fields = ['read']
+    form_class = BookMarkReadForm
     template_name = 'home_lib/book_mark.html'
 
     def post(self, request, *args, **kwargs):
+        super().post(self, request, *args, **kwargs)
         obj = self.model.objects.get(pk=self.kwargs.get('pk'))
         obj.read = not obj.read
         obj.save()
@@ -82,3 +83,18 @@ class BookMarkReadView(UpdateView):
 
     def get_success_url(self):
         return reverse('book-search')
+
+
+class BookWishlistView(CreateView):
+    form_class = BookWishlistForm
+    model = Wishlist
+    template_name = 'home_lib/book_wishlist.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["object_list"] = self.model.objects.filter(created_by=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)

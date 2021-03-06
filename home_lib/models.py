@@ -33,4 +33,7 @@ class Book(models.Model):
         return reverse('book-create')
 
 
+class Wishlist(Book, models.Model):
 
+    def get_absolute_url(self):
+        return reverse('book-wishlist')

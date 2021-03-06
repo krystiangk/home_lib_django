@@ -32,6 +32,12 @@
                             <label class="form__label" for="book_title">Language:</label>
                             <input class="input" value="{{ object.get_language_display }}" id='book_title' readonly>
                         </p>
+                        {% if not object.read %}
+                        <p class="form__group" >
+                            <label class="form__label" for="read_date">Date when you finished reading the book: </label>
+                            {{ form }}
+                        </p>
+                        {% endif %}
                     <button class="button" type="submit" name="submit_button" value="add_book"> Yes, mark as
                         {% if object.read %}
                         unread

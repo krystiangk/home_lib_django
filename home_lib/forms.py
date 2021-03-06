@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book
+from .models import Book, Wishlist
 
 
 class BookCreateForm(forms.ModelForm):
@@ -29,3 +29,32 @@ class BookSearchForm(BookCreateForm, forms.ModelForm):
         self.fields['author'].required = False
         self.fields['year'].required = False
         self.fields['language'].required = False
+
+
+class BookMarkReadForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['read_timestamp']
+        widgets = {
+            'read_timestamp': forms.DateTimeInput(attrs={'class': 'input', 'type': 'date'})
+        }
+
+
+class BookWishlistForm(forms.ModelForm):
+    class Meta:
+        model = Wishlist
+        fields = ['title', 'author', 'year', 'language']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Enter the title of the book', 'class': 'input'}),
+            'author': forms.TextInput(attrs={'placeholder': 'Enter the author of the book', 'class': 'input'}),
+            'year': forms.TextInput(attrs={'placeholder': 'Enter the year of publication', 'class': 'input'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(BookWishlistForm, self).__init__(*args, **kwargs)
+        self.fields['language'].widget.attrs.update({'class': 'input'})
+
+    def clean(self):
+        # Don't allow insertion of duplicate books.
+        if Wishlist.objects.filter(title=self.cleaned_data.get('title')).exists():
+            raise forms.ValidationError('This book already exists in the database!')
