@@ -21,7 +21,7 @@
                         </thead>
                         <tbody>
                             {%  if object_list.count == 0 %}
-                                <td colspan="5">There are no books in the database yet.</td>
+                                <td colspan="8">There are no books in the database yet.</td>
                             {% endif %}
                              {% for book in object_list %}
                                     <tr>
@@ -32,11 +32,34 @@
                                         <td>{{book.year}}</td>
                                         <td>{{book.get_language_display }}</td>
                                         <td>{{ book.read_timestamp|date:"d M, Y" }}</td>
-                                        <td><a class="delete_link" href={% url 'book-read-delete' pk=book.id %}>Delete</a></td>
+                                        <td><a class="mark_read_link" href={% url 'book-mark' pk=book.id %}>Mark as unread</a></td>
                                     </tr>
                              {% endfor %}
                         </tbody>
                     </table>
+
+                    {% if is_paginated %}
+
+                          {% if page_obj.has_previous %}
+                            <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
+                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                          {% endif %}
+
+                          {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                              <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                              <a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+                            {% endif %}
+                          {% endfor %}
+
+                          {% if page_obj.has_next %}
+                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                          {% endif %}
+
+                    {% endif %}
+
                 </div>
             </section>
         </div>

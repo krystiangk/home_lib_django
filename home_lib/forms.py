@@ -18,7 +18,14 @@ class BookCreateForm(forms.ModelForm):
 
     def clean(self):
         # Don't allow insertion of duplicate books.
-        if Book.objects.filter(title=self.cleaned_data.get('title')).exists():
+        # if Book.objects.filter(title__iexact=self.cleaned_data.get('title'),
+        #                            author__iexact=self.cleaned_data.get('author'),
+        #                            year__iexact=self.cleaned_data.get('year'),
+        #                            language__iexact=self.cleaned_data.get('language')).exists():
+        if Book.objects.filter(title__icontains=self.cleaned_data.get('title'),
+                               author__icontains=self.cleaned_data.get('author'),
+                               year__icontains=self.cleaned_data.get('year'),
+                               language__icontains=self.cleaned_data.get('language')).exists():
             raise forms.ValidationError('This book already exists in the database!')
 
 
@@ -56,5 +63,10 @@ class BookWishlistForm(forms.ModelForm):
 
     def clean(self):
         # Don't allow insertion of duplicate books.
-        if Wishlist.objects.filter(title=self.cleaned_data.get('title')).exists():
+        #if Wishlist.objects.filter(title=self.cleaned_data.get('title')).exists():
+        if Wishlist.objects.filter(title=self.cleaned_data.get('title'),
+                                   author=self.cleaned_data.get('author'),
+                                   year=self.cleaned_data.get('year'),
+                                   language=self.cleaned_data.get('language')).exists():
+
             raise forms.ValidationError('This book already exists in the database!')

@@ -227,3 +227,7 @@ select:not(:valid) {
 .nonfield {
     color: #b11c1c;
 }
+
+.table-title-row {
+    max-width: 300px;
+}

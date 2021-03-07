@@ -39,12 +39,13 @@
                                     <th>Author</th>
                                     <th>Year</th>
                                     <th>Language</th>
+                                    <th>Delete</th>
 
                                 </tr>
                             </thead>
                             <tbody>
                                 {%  if object_list.count == 0 %}
-                                    <td colspan="5">There are no books in the database yet.</td>
+                                    <td colspan="6">There are no books in the database yet.</td>
                                 {% endif %}
                                  {% for book in object_list %}
                                         <tr>
@@ -53,6 +54,8 @@
                                             <td>{{book.author}}</td>
                                             <td>{{book.year}}</td>
                                             <td>{{book.get_language_display }}</td>
+                                            <td><a class="delete_link" href={% url 'book-delete' pk=book.id %}>Delete</a></td>
+
                                         </tr>
                                  {% endfor %}
                             </tbody>

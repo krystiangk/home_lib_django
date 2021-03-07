@@ -5,7 +5,7 @@ from .forms import BookCreateForm, BookSearchForm, BookMarkReadForm, BookWishlis
 from django.views.generic.edit import FormMixin
 from django.db.models import Q
 from django.urls import reverse
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 def home(request):
@@ -13,13 +13,20 @@ def home(request):
 
 
 class BookCreateView(CreateView):
-    form_class = BookCreateForm
     model = Book
+    paginate_by = 15
     template_name = 'home_lib/book_create.html'
+    form_class = BookCreateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["object_list"] = self.model.objects.filter(created_by=self.request.user)
+        queryset = self.model.objects.filter(created_by=self.request.user)
+        p = Paginator(queryset, self.paginate_by)
+        page_num = self.request.GET.get('page')
+        if page_num:
+            context['page_obj'] = p.get_page(page_num)
+        else:
+            context['page_obj'] = p.get_page(1)
         return context
 
     def form_valid(self, form):
@@ -30,6 +37,7 @@ class BookCreateView(CreateView):
 class BookSearchView(FormMixin, ListView):
     form_class = BookSearchForm
     model = Book
+    paginate_by = 15
     template_name = 'home_lib/book_search.html'
 
     def get_queryset(self):
@@ -37,7 +45,10 @@ class BookSearchView(FormMixin, ListView):
         object_list = self.model.objects.filter(created_by=self.request.user)
         if query:
             cleaned_query = {k: v for k, v in query.items() if v != ''}
-            cleaned_query.pop("submit_button")
+            if cleaned_query.get('submit_button'):
+                cleaned_query.pop("submit_button")
+            if cleaned_query.get('page'):
+                cleaned_query.pop("page")
             or_condition = Q()
             for key, value in cleaned_query.items():
                 or_condition.add(Q(**{f'{key}__icontains': value}), Q.OR)
@@ -48,6 +59,7 @@ class BookSearchView(FormMixin, ListView):
 class BookReadView(ListView):
     model = Book
     template_name = 'home_lib/book_read.html'
+    paginate_by = 15
 
     def get_queryset(self):
         object_list = Book.objects.filter(read=True)
@@ -59,14 +71,6 @@ class BookDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('book-search')
-
-
-class BookReadDeleteView(DeleteView):
-    model = Book
-    template_name = 'home_lib/book_read_delete.html'
-
-    def get_success_url(self):
-        return reverse('book-read')
 
 
 class BookMarkReadView(UpdateView):
