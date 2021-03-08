@@ -231,3 +231,11 @@ select:not(:valid) {
 .table-title-row {
     max-width: 300px;
 }
+
+.content-section {
+  background: #ffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}

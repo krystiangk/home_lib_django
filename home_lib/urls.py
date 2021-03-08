@@ -18,5 +18,5 @@ urlpatterns = [
     path('book/<int:pk>/delete/', BookDeleteView.as_view(), name='book-delete'),
     #path('book/read/<int:pk>/unmark/', BookReadDeleteView.as_view(), name='book-read-unmark'),
     path('book/<int:pk>/mark', BookMarkReadView.as_view(), name='book-mark'),
-    path('book/wishlist', BookWishlistView.as_view(), name='book-wishlist')
+    path('book/wishlist', BookWishlistView.as_view(), name='book-wishlist'),
 ]
