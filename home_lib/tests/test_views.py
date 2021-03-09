@@ -11,7 +11,7 @@ class TestViews(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
-        self.user = User.objects.create_user('foo', password='bar', is_superuser=True)
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', password='12345')
         self.create_book_url = reverse('book-create')
         self.home_url = reverse('home')
 
@@ -29,7 +29,6 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, 'home_lib/home.html')
 
     def test_book_create_view_GET(self):
-        User.objects.create_user('john', 'lennon@thebeatles.com', password='12345')
         self.client.login(username='john', password='12345')
 
         response = self.client.get(self.create_book_url)
@@ -38,7 +37,6 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, 'home_lib/book_create.html')
 
     def test_book_create_view_POST_success(self):
-        user = User.objects.create_user('john', 'lennon@thebeatles.com', password='12345')
         self.client.login(username='john', password='12345')
 
         # from django.contrib import auth
@@ -59,7 +57,7 @@ class TestViews(TestCase):
         self.assertEquals(book.author, 'Harari')
         self.assertEquals(book.year, 1001)
         self.assertEquals(book.language, 'FR')
-        self.assertEquals(book.created_by, user)
+        self.assertEquals(book.created_by, self.user)
         self.assertEquals(book.read, False)
         self.assertEquals(book.read_timestamp, None)
         self.assertEquals(type(book.entry_timestamp), datetime.datetime)
