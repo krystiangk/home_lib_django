@@ -13,6 +13,8 @@ class TestViews(TestCase):
         self.factory = RequestFactory()
         self.user = User.objects.create_user('foo', password='bar', is_superuser=True)
         self.create_book_url = reverse('book-create')
+        self.home_url = reverse('home')
+
         self.form_data = {
             'title': 'Sapiens',
             'author': 'Harari',
@@ -27,28 +29,22 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, 'home_lib/home.html')
 
     def test_book_create_view_GET(self):
-        request = self.factory.get('/')
-        view = BookCreateView()
-        view.setup(request)
-
-        self.assertEquals(1, 1)
-
-    # def test_book_create_view_POST(self):
-    #     Book.objects.create(**self.form_data)
-    #     self.assertEqual(Book.objects.last().title, "Sapiens")
-
-    def test_post_create_view_POST_success(self):
-        user = User.objects.create_user('john', 'lennon@thebeatles.com', is_superuser=True)
-        user.set_password('12345')
-        user.is_superuser = True
-        user.save()
-
+        User.objects.create_user('john', 'lennon@thebeatles.com', password='12345')
         self.client.login(username='john', password='12345')
 
-        from django.contrib import auth
-        user_1 = auth.get_user(self.client)
-        if user_1.is_authenticated:
-            print('user successfully authenticated')
+        response = self.client.get(self.create_book_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home_lib/book_create.html')
+
+    def test_book_create_view_POST_success(self):
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', password='12345')
+        self.client.login(username='john', password='12345')
+
+        # from django.contrib import auth
+        # user_1 = auth.get_user(self.client)
+        # if user_1.is_authenticated:
+        #     print('user successfully authenticated')
 
         response = self.client.post('/book/new', data=self.form_data)
 
