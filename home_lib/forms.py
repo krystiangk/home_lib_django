@@ -18,10 +18,6 @@ class BookCreateForm(forms.ModelForm):
 
     def clean(self):
         # Don't allow insertion of duplicate books.
-        # if Book.objects.filter(title__iexact=self.cleaned_data.get('title'),
-        #                            author__iexact=self.cleaned_data.get('author'),
-        #                            year__iexact=self.cleaned_data.get('year'),
-        #                            language__iexact=self.cleaned_data.get('language')).exists():
         if Book.objects.filter(title__icontains=self.cleaned_data.get('title'),
                                author__icontains=self.cleaned_data.get('author'),
                                year__icontains=self.cleaned_data.get('year'),

@@ -37,10 +37,6 @@ class BookCreateView(CreateView):
     #     self.object = self.get_object()
     #     return super(BookCreateView).post(request, *args, **kwargs)
 
-    # def post(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     return super(CreateView, self).post(request, *args, **kwargs)
-
 
 class BookSearchView(FormMixin, ListView):
     form_class = BookSearchForm
