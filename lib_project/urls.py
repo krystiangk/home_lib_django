@@ -24,4 +24,5 @@ urlpatterns = [
     #path('user/login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     #path('user/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('home_lib.urls')),
+    path('user/', include('users.urls')),
 ]

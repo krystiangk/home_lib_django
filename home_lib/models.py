@@ -5,6 +5,10 @@ from django.contrib.auth.models import User
 
 
 class Book(models.Model):
+
+    class Meta:
+        ordering = ['id']
+
     FRENCH = 'FR'
     ENGLISH = 'EN'
     NORWEGIAN = 'NO'

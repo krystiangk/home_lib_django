@@ -1,0 +1,27 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="container">
+        <div class="row justify-content-center align-items-center mt-4">
+            <div class="col-pixel-width-580">
+                <form class="insert_window" method="POST">
+                    {% csrf_token %}
+                    <h1>Log in</h1>
+
+                    {{ form|crispy }}
+
+                    <button class="button" type="submit" name="submit_button" value="add_book">Sign in</button>
+                    <small class="text-muted ml-2">
+                    <a href="{%  url 'password_reset' %}">Forgot password?</a><br>
+                    </small>
+                    <small style="color: #bfa170">
+                        Need An Account? <a style="color: #bfa170" class="ml-2" href="{%  url 'register' %}">Sign up</a>
+                    </small>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+

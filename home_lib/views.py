@@ -6,13 +6,14 @@ from django.views.generic.edit import FormMixin
 from django.db.models import Q
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
+
 def home(request):
     return render(request, 'home_lib/home.html')
 
 
-class BookCreateView(CreateView):
+class BookCreateView(LoginRequiredMixin, CreateView):
     model = Book
     paginate_by = 15
     template_name = 'home_lib/book_create.html'
@@ -20,7 +21,7 @@ class BookCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = self.model.objects.filter(created_by=self.request.user)
+        queryset = self.model.objects.filter(created_by=self.request.user).order_by('id')
         p = Paginator(queryset, self.paginate_by)
         page_num = self.request.GET.get('page')
         if page_num:
@@ -38,7 +39,7 @@ class BookCreateView(CreateView):
     #     return super(BookCreateView).post(request, *args, **kwargs)
 
 
-class BookSearchView(FormMixin, ListView):
+class BookSearchView(LoginRequiredMixin, FormMixin, ListView):
     form_class = BookSearchForm
     model = Book
     paginate_by = 15
@@ -60,7 +61,7 @@ class BookSearchView(FormMixin, ListView):
         return object_list
 
 
-class BookReadView(ListView):
+class BookReadView(LoginRequiredMixin, ListView):
     model = Book
     template_name = 'home_lib/book_read.html'
     paginate_by = 15
@@ -70,14 +71,14 @@ class BookReadView(ListView):
         return object_list
 
 
-class BookDeleteView(DeleteView):
+class BookDeleteView(LoginRequiredMixin, DeleteView):
     model = Book
 
     def get_success_url(self):
         return reverse('book-search')
 
 
-class BookMarkReadView(UpdateView):
+class BookMarkReadView(LoginRequiredMixin, UpdateView):
     model = Book
     form_class = BookMarkReadForm
     template_name = 'home_lib/book_mark.html'
@@ -93,7 +94,7 @@ class BookMarkReadView(UpdateView):
         return reverse('book-search')
 
 
-class BookWishlistView(CreateView):
+class BookWishlistView(LoginRequiredMixin, CreateView):
     form_class = BookWishlistForm
     model = Wishlist
     template_name = 'home_lib/book_wishlist.html'

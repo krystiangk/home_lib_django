@@ -1,0 +1,24 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center mt-4">
+            <div class="col-pixel-width-580">
+                <form class="insert_window" method="POST">
+                    {% csrf_token %}
+                    <h1>Sign up</h1>
+
+                    {{ form|crispy }}
+
+                    <button class="button" type="submit" name="submit_button" value="add_book">Sign up</button>
+
+                <small style="color: #bfa170">
+                    Already Have an Account? <a class="ml-2" href="{% url 'login' %}">Sign in</a>
+                </small>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+
