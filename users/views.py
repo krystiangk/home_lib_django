@@ -18,6 +18,9 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
+def logout(request):
+    messages.info(request, 'You have been logged out')
+    return redirect('login')
 
 # Types of messages:
 # message.debug
