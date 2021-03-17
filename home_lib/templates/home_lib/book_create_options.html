@@ -5,27 +5,11 @@
         <div class="row">
             <div class="col-pixel-width-580">
                 <section class="window_table">
-                <form class="insert_window" method="POST">
-                    {% csrf_token %}
-                    <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add a new book</h1>
-                    <h3>Please fill the entries to insert a new book to the database</h3>
-
-                    {% for error in form.non_field_errors %}
-                        <div class="row">
-                            {{ error|escape }}
-                        </div>
-                    {% endfor %}
-
-                    {% for field in form %}
-                        {{  field.errors|escape }}
-                        <p class="form__group">
-                            <label class="form__label" for="{{ field.auto_id }}">{{ field.label }}</label>
-                            {{ field }}
-                        </p>
-                    {% endfor %}
-
-                    <button class="button" type="submit" name="submit_button" value="add_book">Add book</button>
-                </form>
+                    <div class="insert_window">
+                        <h1><span class="glyphicon glyphicon-plus mb-3" aria-hidden="true"></span> Add a new book</h1>
+                        <a class="button" href="{% url 'book-enter-isbn' %}">Create automatically by ISBN search</a>
+                        <a class="button" href="{% url 'book-create-manually' %}">Add a book manually</a>
+                    </div>
                 </section>
             </div>
            <div class="col">
@@ -58,7 +42,7 @@
                                  {% endfor %}
                             </tbody>
                         </table>
-                        {% if page_obj %}
+                        {% if number_of_pages > 1 %}
                           {% if page_obj.has_previous %}
                             <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
                             <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>

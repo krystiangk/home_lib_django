@@ -19,13 +19,13 @@ class TestCreateAndDeleteView(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user('tom', 'tom@tom.com', password='testpass1')
-        self.create_book_url = reverse('book-create')
+        self.create_book_url = reverse('book-create-manually')
 
         self.form_data_1 = {
             'title': 'Heat Transfer',
             'author': 'Yunus Cengel',
             'year': 1001,
-            'language': 'EN',
+            'language': 'en',
         }
 
     def test_book_create_view_GET(self):
@@ -34,7 +34,7 @@ class TestCreateAndDeleteView(TestCase):
         response = self.client.get(self.create_book_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'home_lib/book_create.html')
+        self.assertTemplateUsed(response, 'home_lib/book_create_manually.html')
 
     def test_book_create_view_POST_success(self):
         self.client.login(username='tom', password='testpass1')
@@ -44,7 +44,7 @@ class TestCreateAndDeleteView(TestCase):
         # if user_1.is_authenticated:
         #     print('user successfully authenticated')
 
-        response = self.client.post('/book/new', data=self.form_data_1)
+        response = self.client.post('/book/create-manually', data=self.form_data_1)
 
         book = Book.objects.last()
         num_of_books = Book.objects.all().count()
@@ -56,7 +56,7 @@ class TestCreateAndDeleteView(TestCase):
         self.assertEquals(book.title, 'Heat Transfer')
         self.assertEquals(book.author, 'Yunus Cengel')
         self.assertEquals(book.year, 1001)
-        self.assertEquals(book.language, 'EN')
+        self.assertEquals(book.language, 'en')
         self.assertEquals(book.created_by, self.user)
         self.assertEquals(book.read, False)
         self.assertEquals(book.read_timestamp, None)
@@ -64,16 +64,15 @@ class TestCreateAndDeleteView(TestCase):
 
         self.assertRedirects(
                 response,
-                self.create_book_url,
+                reverse('book-create-options'),
                 status_code=302,
                 target_status_code=200
             )
 
     def test_delete_view(self):
         self.client.login(username='tom', password='testpass1')
-        self.client.post('/book/new', data=self.form_data_1)
+        self.client.post('/book/create-manually', data=self.form_data_1)
         response = self.client.get('/book/new')
-
         self.assertEquals(len(response.context['page_obj']), 1)
 
         book = Book.objects.last()
@@ -106,7 +105,7 @@ class TestCreateAndDeleteView(TestCase):
         self.assertEquals(book.title, 'Heat Transfer')
         self.assertEquals(book.author, 'Yunus Cengel')
         self.assertEquals(book.year, 1001)
-        self.assertEquals(book.language, 'EN')
+        self.assertEquals(book.language, 'en')
         self.assertEquals(book.created_by, self.user)
         self.assertEquals(type(book.entry_timestamp), datetime.datetime)
 
@@ -130,24 +129,24 @@ class TestSearchAndReadViews(TestCase):
             'title': 'Heat Transfer',
             'author': 'Yunus Cengel',
             'year': 1001,
-            'language': 'EN',
+            'language': 'en',
         }
         self.form_data_2 = {
             'title': "L'etranger",
             'author': 'Albert Camus',
             'year': 1001,
-            'language': 'FR',
+            'language': 'fr',
         }
         self.form_data_3 = {
             'title': "Republic",
             'author': 'Plato',
             'year': 1001,
-            'language': 'EN',
+            'language': 'en',
         }
         self.client.login(username='tom', password='testpass1')
-        self.client.post('/book/new', data=self.form_data_1)
-        self.client.post('/book/new', data=self.form_data_2)
-        self.client.post('/book/new', data=self.form_data_3)
+        self.client.post('/book/create-manually', data=self.form_data_1)
+        self.client.post('/book/create-manually', data=self.form_data_2)
+        self.client.post('/book/create-manually', data=self.form_data_3)
 
     def test_book_search_view_find_by_author_success(self):
         response = self.client.get(self.search_url, {'author': 'yunus'})
@@ -194,10 +193,10 @@ class TestSearchAndReadViews(TestCase):
 
     def test_book_search_view_show_only_books_of_logged_in_user_success(self):
         self.client.login(username='bill', password='testpass2')
-        self.client.post('/book/new', data={'title': 'Trzy po trzy',
+        self.client.post('/book/create-manually', data={'title': 'Trzy po trzy',
                                             'author': 'Fredro',
                                             'year': 1880,
-                                            'language': 'PL'})
+                                            'language': 'pl'})
 
         response = self.client.get(self.search_url)
         self.assertEquals(len(response.context['object_list']), 1)

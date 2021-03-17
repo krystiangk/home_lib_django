@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from ..views import (home, BookCreateView, BookSearchView, BookReadView,
+from ..views import (home, BookCreateManuallyView, BookSearchView, BookReadView,
                      BookDeleteView, BookMarkReadView, BookWishlistView)
 
 
@@ -11,8 +11,8 @@ class TestUrls(SimpleTestCase):
         self.assertEqual(resolve(url).func, home)
 
     def test_book_create_url_resolves(self):
-        url = reverse('book-create')
-        self.assertEqual(resolve(url).func.view_class, BookCreateView)
+        url = reverse('book-create-manually')
+        self.assertEqual(resolve(url).func.view_class, BookCreateManuallyView)
 
     def test_book_search_url_resolves(self):
         url = reverse('book-search')

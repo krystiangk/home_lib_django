@@ -1,42 +1,78 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView, ListView, DeleteView, UpdateView
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, FormView
 from .models import Book, Wishlist
-from .forms import BookCreateForm, BookSearchForm, BookMarkReadForm, BookWishlistForm
+from .forms import BookCreateForm, BookSearchForm, BookMarkReadForm, BookWishlistForm, BookIsbnForm
 from django.views.generic.edit import FormMixin
 from django.db.models import Q
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .utils import find_by_isbn_open_library
+from django.contrib import messages
 
 
 def home(request):
     return render(request, 'home_lib/home.html')
 
 
-class BookCreateView(LoginRequiredMixin, CreateView):
+class BookCreateOptionsView(LoginRequiredMixin, ListView):
     model = Book
-    paginate_by = 15
-    template_name = 'home_lib/book_create.html'
-    form_class = BookCreateForm
+    paginate_by = 10
+    template_name = 'home_lib/book_create_options.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = self.model.objects.filter(created_by=self.request.user).order_by('id')
         p = Paginator(queryset, self.paginate_by)
         page_num = self.request.GET.get('page')
+        context['number_of_pages'] = p.num_pages
         if page_num:
             context['page_obj'] = p.get_page(page_num)
         else:
             context['page_obj'] = p.get_page(1)
         return context
 
+
+class BaseBookCreateView(CreateView):
+    model = Book
+    form_class = BookCreateForm
+
+    def form_invalid(self, form):
+        if form.non_field_errors():
+            messages.error(self.request, "This book already exists in the database.")
+        super().form_invalid(form)
+        return redirect('book-create-options')
+
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
+        book = form.save(commit=False)
+        book.created_by = self.request.user
+        book.save()
         return super().form_valid(form)
 
-    # def post(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     return super(BookCreateView).post(request, *args, **kwargs)
+
+class BookCreateManuallyView(LoginRequiredMixin, BaseBookCreateView):
+    template_name = 'home_lib/book_create_manually.html'
+
+
+class BookEnterIsbnView(LoginRequiredMixin, FormView):
+    form_class = BookIsbnForm
+    template_name = 'home_lib/book_enter_isbn.html'
+
+
+class BookCreateByIsbnView(LoginRequiredMixin, BaseBookCreateView):
+    def get(self, *args, **kwargs):
+        try:
+            if 'isbn13' in self.request.GET:
+                isbn = self.request.GET['isbn13']
+                print(isbn)
+                book = find_by_isbn_open_library(isbn)
+                form = BookCreateForm(initial={'title': book['title'], 'author': book['authors'],
+                                               'year': book['year'], 'language': book['language']})
+                return render(self.request, 'home_lib/book_create_by_isbn.html', {'book': book, 'form': form})
+        except KeyError:
+            print('This way')
+            messages.info(self.request, "This book has not been found in our database.")
+            return redirect('book-enter-isbn')
 
 
 class BookSearchView(LoginRequiredMixin, FormMixin, ListView):
@@ -107,6 +143,7 @@ class BookWishlistView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+
 
 
 # def stats(request):

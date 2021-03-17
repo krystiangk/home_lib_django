@@ -1,0 +1,20 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-pixel-width-580">
+                <section class="window_table">
+                <form class="insert_window" action="{% url 'book-create-by-isbn' %}" method="GET">
+                    <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Find a book by ISBN</h1>
+                    <h3>Enter 13-digit ISBN number of the book you're looking for:</h3>
+
+                    {{ form|crispy }}
+
+                    <button class="button" type="submit" name="submit_button" value="add_book">Find</button>
+                </form>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

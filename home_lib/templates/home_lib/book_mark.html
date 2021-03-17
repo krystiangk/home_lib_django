@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="container">
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-pixel-width-580">
                 <section class="window_table">
                 <form class="insert_window" method="POST">
@@ -35,7 +35,7 @@
                         {% if not object.read %}
                         <p class="form__group" >
                             <label class="form__label" for="read_date">Date when you finished reading the book: </label>
-                            {{ form }}
+                            {{ form.read_timestamp }}
                         </p>
                         {% endif %}
                     <button class="button" type="submit" name="submit_button" value="add_book"> Yes, mark as

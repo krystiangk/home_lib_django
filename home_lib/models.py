@@ -2,27 +2,13 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth.models import User
+from .utils import LANGUAGE_CHOICES
 
 
 class Book(models.Model):
 
     class Meta:
         ordering = ['id']
-
-    FRENCH = 'FR'
-    ENGLISH = 'EN'
-    NORWEGIAN = 'NO'
-    POLISH = 'PL'
-    RUSSIAN = 'RU'
-    UKRAINIAN = 'UA'
-    LANGUAGE_CHOICES = [
-        (FRENCH, 'French'),
-        (ENGLISH, 'English'),
-        (NORWEGIAN, 'Norwegian'),
-        (POLISH, 'Polish'),
-        (RUSSIAN, 'Russian'),
-        (UKRAINIAN, 'Ukrainian'),
-    ]
 
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
@@ -34,7 +20,7 @@ class Book(models.Model):
     read_timestamp = models.DateTimeField(default=None, null=True)
 
     def get_absolute_url(self):
-        return reverse('book-create')
+        return reverse('book-create-options')
 
 
 class Wishlist(Book, models.Model):

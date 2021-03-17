@@ -1,5 +1,7 @@
 from django import forms
 from .models import Book, Wishlist
+from django.contrib import messages
+from django.core.validators import RegexValidator
 
 
 class BookCreateForm(forms.ModelForm):
@@ -20,7 +22,9 @@ class BookCreateForm(forms.ModelForm):
                                    author__icontains=self.cleaned_data.get('author'),
                                    year__icontains=self.cleaned_data.get('year'),
                                    language__icontains=self.cleaned_data.get('language')).exists():
-                raise forms.ValidationError('This book already exists in the database!')
+                # This error will not be shown in the form,
+                # BookCreateView's form_invalid() method handles messages.
+                raise forms.ValidationError('Book already exists', code='exists')
         except ValueError as e:
             raise forms.ValidationError(e)
 
@@ -66,3 +70,7 @@ class BookWishlistForm(forms.ModelForm):
                                    language=self.cleaned_data.get('language')).exists():
 
             raise forms.ValidationError('This book already exists in the database!')
+
+
+class BookIsbnForm(forms.Form):
+    isbn13 = forms.CharField(max_length=13, min_length=13, validators=[RegexValidator(r'^\d{1,10}$')])

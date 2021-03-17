@@ -1,0 +1,27 @@
+{% extends "home_lib/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-pixel-width-580">
+                <section class="window_table">
+                <form class="insert_window" method="POST">
+                    {% csrf_token %}
+                    <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add a new book</h1>
+                    <h3>Please fill the entries to insert a new book to the database</h3>
+
+                    {% for field in form %}
+                        {{  field.errors|escape }}
+                        <p class="form__group">
+                            <label class="form__label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                            {{ field }}
+                        </p>
+                    {% endfor %}
+
+                    <button class="button" type="submit" name="submit_button" value="add_book">Add book</button>
+                </form>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

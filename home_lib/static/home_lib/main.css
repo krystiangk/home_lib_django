@@ -131,7 +131,7 @@ overflow: auto;
 .table-wrapper-scroll-y {
 margin: 0rem auto 5rem auto;
 display: block;
-min-height: 60rem;
+min-height: 30rem;
 }
 
 .message {
@@ -253,4 +253,8 @@ select:not(:valid) {
 
 .asteriskField {
     display: none;
+}
+
+.wide_window {
+    width: 50rem!important;
 }
