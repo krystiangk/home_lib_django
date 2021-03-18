@@ -178,6 +178,11 @@ color: black;
     font-weight: bold;
 }
 
+.mark_unread_link {
+    color: #8ead8e;
+    font-weight: bold;
+}
+
 .date_plot {
     width: 700px;
 }

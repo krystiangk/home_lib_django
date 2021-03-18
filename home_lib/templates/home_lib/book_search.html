@@ -51,11 +51,12 @@
                                             <td>{{book.author}}</td>
                                             <td>{{book.year}}</td>
                                             <td>{{book.get_language_display}}</td>
-                                            <td><a class="mark_read_link" href={% url 'book-mark' pk=book.id %}>
+                                            <td><a  href={% url 'book-mark' pk=book.id %}
+
                                                         {% if book.read %}
-                                                        Mark as unread
+                                                        class="mark_unread_link">Mark as unread
                                                         {% else %}
-                                                        Mark as read
+                                                        class="mark_read_link">Mark as read
                                                         {% endif %}
                                                     </a></td>
                                             <td><a class="delete_link" href={% url 'book-delete' pk=book.id %}>Delete</a></td>

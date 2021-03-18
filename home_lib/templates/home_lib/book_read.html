@@ -16,7 +16,7 @@
                                 <th>Year</th>
                                 <th>Language</th>
                                 <th>Read date</th>
-                                <th>Delete</th>
+                                <th>Mark as</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,7 +32,7 @@
                                         <td>{{book.year}}</td>
                                         <td>{{book.get_language_display }}</td>
                                         <td>{{ book.read_timestamp|date:"d M, Y" }}</td>
-                                        <td><a class="mark_read_link" href={% url 'book-mark' pk=book.id %}>Mark as unread</a></td>
+                                        <td><a class="mark_unread_link" href={% url 'book-mark' pk=book.id %}>Mark as unread</a></td>
                                     </tr>
                              {% endfor %}
                         </tbody>
