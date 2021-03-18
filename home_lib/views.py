@@ -71,7 +71,7 @@ class BookCreateByIsbnView(LoginRequiredMixin, BaseBookCreateView):
                 return render(self.request, 'home_lib/book_create_by_isbn.html', {'book': book, 'form': form})
         except KeyError:
             print('This way')
-            messages.info(self.request, "This book has not been found in our database.")
+            messages.info(self.request, "Sorry, this book has not been found in our databases, but you can still add it manually.")
             return redirect('book-enter-isbn')
 
 
@@ -143,52 +143,3 @@ class BookWishlistView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
-
-
-
-# def stats(request):
-#     from bokeh.plotting import figure
-#     from bokeh.embed import components
-#     from bokeh.resources import CDN
-#     from bokeh.models import SingleIntervalTicker
-#     from bokeh.models import Span
-#
-#     # 1st plot ##############################################################################
-#     data_dict = AllBooks.stats()
-#     all_books = data_dict['all_books']
-#     print('Allbooks', all_books)
-#     books_by_lang = data_dict['books_by_lang']
-#
-#     if request.method == "POST":
-#         if request.form["monthly_goal"]:
-#             monthly_goal = int(request.form["monthly_goal"])
-#             max_y_ax = monthly_goal
-#     else:
-#         monthly_goal = 2
-#         max_y_ax = None
-#
-#     if all_books != 0:
-#         x = [i[0] for i in books_by_lang]
-#         y = [i[1] for i in books_by_lang]
-#
-#         # Add a plot
-#         p = figure(
-#             title='Number of books in given languages in the collection',
-#             x_range=x,
-#             y_range=(0, max(y)),
-#             x_axis_label='Language',
-#             y_axis_label='Number of books',
-#         )
-#
-#         p.vbar(
-#             x,
-#             top=y,
-#             width=0.5,
-#             color='green',
-#             fill_alpha=0.5
-#         )
-#
-#         script1, div1 = components(p)
-#         cdn_js = CDN.js_files[0]
-#
-#         return render("stats.html", script1=script1, div1=div1, cdn_js=cdn_js)

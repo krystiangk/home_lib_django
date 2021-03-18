@@ -1,20 +1,18 @@
 FROM python:3.8.7-alpine
 
+WORKDIR /app
+
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV DEBUG 0
 
 # install psycopg2
-#RUN apk update
+RUN apk update \
+    && apk add --virtual build-deps gcc python3-dev musl-dev \
+    && apk add postgresql-dev \
+    && pip install psycopg2 \
+    && apk del build-deps
 
-#RUN apk update \
-#    && apk add --virtual build-deps gcc python3-dev musl-dev \
-#    && apk add postgresql-dev \
-#    && pip install psycopg2 \
-#    && apk del build-deps
-
-# start to install backend-end stuff
-WORKDIR /app
 
 # Install Python requirements.
 COPY requirements.txt .

@@ -92,6 +92,15 @@ body {
     background: #ec8164;
 }
 
+.hyperlink-b {
+    text-decoration: None!important;
+}
+
+.hyperlink-b:hover {
+    color: #f4f1de;
+}
+
+
 .insert_window {
     width: 25rem;
     padding: 1rem 2rem;
@@ -162,6 +171,8 @@ color: black;
     background-color: #555765;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
+    width: 100%;
+
 }
 
 .book_edit {
@@ -263,3 +274,10 @@ select:not(:valid) {
 .wide_window {
     width: 50rem!important;
 }
+
+img {
+    display: block;
+    width: 60%;
+    max-height: 32rem;
+}
+
