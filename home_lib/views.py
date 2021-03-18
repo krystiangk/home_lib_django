@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import find_by_isbn_open_library
 from django.contrib import messages
+from django.core.exceptions import NON_FIELD_ERRORS
 
 
 def home(request):
@@ -38,10 +39,11 @@ class BaseBookCreateView(CreateView):
     form_class = BookCreateForm
 
     def form_invalid(self, form):
-        if form.non_field_errors():
+        if form.has_error(NON_FIELD_ERRORS, 'exists'):
             messages.error(self.request, "This book already exists in the database.")
-        super().form_invalid(form)
-        return redirect('book-create-options')
+            return redirect('book-create-options')
+        return super().form_invalid(form)
+
 
     def form_valid(self, form):
         book = form.save(commit=False)
@@ -52,11 +54,6 @@ class BaseBookCreateView(CreateView):
 
 class BookCreateManuallyView(LoginRequiredMixin, BaseBookCreateView):
     template_name = 'home_lib/book_create_manually.html'
-
-
-class BookEnterIsbnView(LoginRequiredMixin, FormView):
-    form_class = BookIsbnForm
-    template_name = 'home_lib/book_enter_isbn.html'
 
 
 class BookCreateByIsbnView(LoginRequiredMixin, BaseBookCreateView):
@@ -73,6 +70,11 @@ class BookCreateByIsbnView(LoginRequiredMixin, BaseBookCreateView):
             print('This way')
             messages.info(self.request, "Sorry, this book has not been found in our databases, but you can still add it manually.")
             return redirect('book-enter-isbn')
+
+
+class BookEnterIsbnView(LoginRequiredMixin, FormView):
+    form_class = BookIsbnForm
+    template_name = 'home_lib/book_enter_isbn.html'
 
 
 class BookSearchView(LoginRequiredMixin, FormMixin, ListView):
@@ -103,7 +105,7 @@ class BookReadView(LoginRequiredMixin, ListView):
     paginate_by = 15
 
     def get_queryset(self):
-        object_list = Book.objects.filter(read=True)
+        object_list = Book.objects.filter(read=True).filter(created_by=self.request.user)
         return object_list
 
 

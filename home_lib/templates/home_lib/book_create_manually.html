@@ -10,13 +10,7 @@
                     <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add a new book</h1>
                     <h3>Please fill the entries to insert a new book to the database</h3>
 
-                    {% for field in form %}
-                        {{  field.errors|escape }}
-                        <p class="form__group">
-                            <label class="form__label" for="{{ field.auto_id }}">{{ field.label }}</label>
-                            {{ field }}
-                        </p>
-                    {% endfor %}
+                    {{ form|crispy }}
 
                     <button class="button" type="submit" name="submit_button" value="add_book">Add book</button>
                 </form>
