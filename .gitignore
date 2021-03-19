@@ -1,8 +1,7 @@
 db.sqlite3
 venv
-*.pyc
-__pycache__/
 .env
 .git.bfg-report/
 bfg-1.14.0.jar
-
+__pycache__/
+*.py[cod]
