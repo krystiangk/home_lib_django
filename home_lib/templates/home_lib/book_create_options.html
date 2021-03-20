@@ -1,70 +1,93 @@
-{% extends "home_lib/base.html" %}
+{% extends "base_of_base_sidebar_safe.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+
+
+
     <div class="container">
         <div class="row">
-            <div class="col-pixel-width-580">
-                <section class="window_table">
-                    <div class="insert_window">
-                        <h1><span class="glyphicon glyphicon-plus mb-3" aria-hidden="true"></span> Add a new book</h1>
-                        <a class="hyperlink-b button" href="{% url 'book-enter-isbn' %}">Create automatically by ISBN search</a>
-                        <a class="hyperlink-b button" href="{% url 'book-create-manually' %}">Add a book manually</a>
-                    </div>
-                </section>
+
+        <!-- Sidebar -->
+
+
+        <div class="col-auto pl-0 pr-0">
+            <div class="sidebar-container">
+              <ul class="sidebar-navigation">
+                <li class="header">Add a new book</li>
+                <li>
+                  <a href="{% url 'book-enter-isbn' %}">
+                    <i class="fa fa-laptop" aria-hidden="true"></i>Add using ISBN search
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'book-create-manually' %}">
+                    <i class="fa fa-hand-paper-o" aria-hidden="true"></i>Add manually
+                  </a>
+                </li>
+              </ul>
             </div>
-           <div class="col">
-                <section class="window_table w-100">
-                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                        <table class="table table-light table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Year</th>
-                                    <th>Language</th>
+        </div>
+                <!-- End of Sidebar -->
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {%  if not page_obj %}
-                                    <td colspan="5">There are no books in the database yet.</td>
+           <div class="col pl-0 pr-0">
+
+           <!-- Messages inserted in this column and different base.html used, to avoid the sidebar
+           being pushed down by messages -->
+            {% include "partials/messages_snippet.html" %}
+
+               <div class="p-1">
+                    <section class="window_table w-100">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                            <table class="table table-light table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Year</th>
+                                        <th>Language</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {%  if not page_obj %}
+                                        <td colspan="5">There are no books in the database yet.</td>
+                                    {% endif %}
+                                     {% for book in page_obj %}
+
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td class="table-title-row">{{book.title}}</td>
+                                                <td>{{book.author}}</td>
+                                                <td>{{book.year}}</td>
+                                                <td>{{book.get_language_display }}</td>
+                                            </tr>
+                                     {% endfor %}
+                                </tbody>
+                            </table>
+                            {% if number_of_pages > 1 %}
+                              {% if page_obj.has_previous %}
+                                <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
+                                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                              {% endif %}
+
+                              {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                  <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                  <a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
                                 {% endif %}
-                                 {% for book in page_obj %}
+                              {% endfor %}
 
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td class="table-title-row">{{book.title}}</td>
-                                            <td>{{book.author}}</td>
-                                            <td>{{book.year}}</td>
-                                            <td>{{book.get_language_display }}</td>
-                                        </tr>
-                                 {% endfor %}
-                            </tbody>
-                        </table>
-                        {% if number_of_pages > 1 %}
-                          {% if page_obj.has_previous %}
-                            <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
-                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                          {% endif %}
+                              {% if page_obj.has_next %}
+                                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                              {% endif %}
+                            {%  endif %}
 
-                          {% for num in page_obj.paginator.page_range %}
-                            {% if page_obj.number == num %}
-                              <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
-                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                              <a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
-                            {% endif %}
-                          {% endfor %}
-
-                          {% if page_obj.has_next %}
-                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-                            <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-                          {% endif %}
-                        {%  endif %}
-
-                    </div>
-                </section>
-
+                        </div>
+                    </section>
+               </div>
             </div>
         </div>
     </div>

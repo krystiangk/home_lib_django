@@ -25,4 +25,5 @@ urlpatterns = [
     #path('user/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('home_lib.urls')),
     path('user/', include('users.urls')),
+    path('charts/', include('charts.urls')),
 ]

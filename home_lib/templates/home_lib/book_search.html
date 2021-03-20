@@ -1,4 +1,4 @@
-{% extends "home_lib/base.html" %}
+{% extends "base.html" %}
 {% load custom_tags %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -7,8 +7,8 @@
             <div class="col-pixel-width-580">
                 <section class="window_table">
                 <form class="insert_window" method="GET">
-                    <h1><span class="glyphicon glyphicon-search" aria-hidden="true"></span>Search</h1>
-                    <h3>Please fill one or more entries to search in database</h3>
+                    <h2><span class="glyphicon glyphicon-search" aria-hidden="true"></span>Search</h2>
+                    <h5>Please fill one or more entries to search in database</h5>
 
                     {% for field in form %}
                         <p class="form__group">

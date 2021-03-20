@@ -1,4 +1,4 @@
-{% extends "home_lib/base.html" %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="container">
@@ -7,8 +7,8 @@
                 <section class="window_table">
                 <form class="insert_window" method="POST">
                     {% csrf_token %}
-                    <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Wishlist</h1>
-                    <h3>Books you'd like to have in your home library</h3>
+                    <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Wishlist</h2>
+                    <h5>Books you'd like to have in your home library</h5>
 
                     {% for error in form.non_field_errors %}
                         <div class="row">

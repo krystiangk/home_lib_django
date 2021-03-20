@@ -11,14 +11,16 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{% static 'home_lib/main.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+
 
 </head>
 <body>
 
-    <div class="content container mt-1">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
+    <div class="content container">
+        <nav class="navbar navbar-expand-lg navbar-dark navcolor mb-0">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'home' %}">Home Library</a>
+                <a class="navbar-brand ml-3 mr-3" href="{% url 'home' %}">Home Library</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                         aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -49,22 +51,19 @@
             </div>
 
         </nav>
-         {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {%  endfor %}
-         {%  endif %}
 
-        <div class="mt-0">
+
+
         {% block content %}
 
         {% endblock content %}
-        </div>
+
         <a class="backgrd-web-link" href="https://www.freepik.com/vectors/background">Background vector created by starline - www.freepik.com
         <style>.backgrd-web-link {color: gray}</style>
         </a>
+
+        {% block scripts %}
+        {% endblock scripts %}
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>

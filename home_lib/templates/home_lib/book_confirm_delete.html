@@ -1,4 +1,4 @@
-{% extends "home_lib/base.html" %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="container">
@@ -7,8 +7,8 @@
                 <section class="window_table">
                 <form class="insert_window" method="POST">
                     {% csrf_token %}
-                    <h1><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Delete a book</h1>
-                    <h3>Are you sure you want to delete this book?</h3>
+                    <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Delete a book</h2>
+                    <h5>Are you sure you want to delete this book?</h5>
 
                         <p class="form__group">
                             <label class="form__label" for="book_title">Title:</label>

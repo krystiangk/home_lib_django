@@ -28,6 +28,7 @@ COPY . .
 #
 RUN python manage.py collectstatic --noinput
 
+
 # run gunicorn
 #CMD gunicorn lib_project.wsgi:application --bind 0.0.0.0:$PORT
 CMD gunicorn lib_project.wsgi:application
