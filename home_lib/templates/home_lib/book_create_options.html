@@ -1,7 +1,8 @@
-{% extends "base_of_base_sidebar_safe.html" %}
+{% extends "base.html" %}
+{#{% extends "base.html" %}#}
+
 {% load crispy_forms_tags %}
 {% block content %}
-
 
 
     <div class="container">
@@ -10,13 +11,13 @@
         <!-- Sidebar -->
 
 
-        <div class="col-auto pl-0 pr-0">
+        <div class="col1 pl-0 pr-0">
             <div class="sidebar-container">
               <ul class="sidebar-navigation">
                 <li class="header">Add a new book</li>
                 <li>
                   <a href="{% url 'book-enter-isbn' %}">
-                    <i class="fa fa-laptop" aria-hidden="true"></i>Add using ISBN search
+                      <i class="fa fa-laptop" aria-hidden="true"></i>Add using ISBN search
                   </a>
                 </li>
                 <li>
@@ -29,13 +30,13 @@
         </div>
                 <!-- End of Sidebar -->
 
-           <div class="col pl-0 pr-0">
+           <div class="col2 pl-0 pr-0">
 
            <!-- Messages inserted in this column and different base.html used, to avoid the sidebar
            being pushed down by messages -->
             {% include "partials/messages_snippet.html" %}
 
-               <div class="p-1">
+               <div class="margins-around">
                     <section class="window_table w-100">
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
                             <table class="table table-light table-striped table-bordered">

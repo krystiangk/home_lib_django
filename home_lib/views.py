@@ -13,7 +13,7 @@ from django.core.exceptions import NON_FIELD_ERRORS
 
 
 def home(request):
-    return render(request, 'home_lib/home.html')
+    return render(request, 'home_lib/home.html', {'sidebar': 1})
 
 
 class BookCreateOptionsView(LoginRequiredMixin, ListView):
@@ -31,6 +31,9 @@ class BookCreateOptionsView(LoginRequiredMixin, ListView):
             context['page_obj'] = p.get_page(page_num)
         else:
             context['page_obj'] = p.get_page(1)
+        # Sidebar flag added to change rendering of template messages, to not allow the
+        # sidebar to be pushed down by alert messages
+        context['sidebar'] = 1
         return context
 
 

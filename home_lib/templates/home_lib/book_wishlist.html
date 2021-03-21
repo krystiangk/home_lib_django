@@ -10,19 +10,7 @@
                     <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Wishlist</h2>
                     <h5>Books you'd like to have in your home library</h5>
 
-                    {% for error in form.non_field_errors %}
-                        <div class="row">
-                            {{ error|escape }}
-                        </div>
-                    {% endfor %}
-
-                    {% for field in form %}
-                        {{  field.errors|escape }}
-                        <p class="form__group">
-                            <label class="form__label" for="{{ field.auto_id }}">{{ field.label }}</label>
-                            {{ field }}
-                        </p>
-                    {% endfor %}
+                    {{ form|crispy }}
 
                     <button class="button" type="submit" name="submit_button" value="add_book"> Submit </button>
                 </form>

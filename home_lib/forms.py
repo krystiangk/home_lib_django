@@ -3,8 +3,10 @@ from .models import Book, Wishlist
 from django.contrib import messages
 from django.core.validators import RegexValidator
 
+
 class BaseBookCreateForm(forms.ModelForm):
     class Meta:
+        model = None
         fields = ['title', 'author', 'year', 'language']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Enter the title of the book'}),
@@ -16,7 +18,7 @@ class BaseBookCreateForm(forms.ModelForm):
 
         # Don't allow insertion of duplicate books.
         try:
-            if Book.objects.filter(title__icontains=self.cleaned_data.get('title'),
+            if self.Meta.model.objects.filter(title__icontains=self.cleaned_data.get('title'),
                                    author__icontains=self.cleaned_data.get('author'),
                                    year__icontains=self.cleaned_data.get('year'),
                                    language__icontains=self.cleaned_data.get('language')).exists():
@@ -71,6 +73,7 @@ class BookWishlistForm(BaseBookCreateForm):
     class Meta(BaseBookCreateForm.Meta):
         model = Wishlist
         fields = BaseBookCreateForm.Meta.fields
+
 
 # class BookWishlistForm(forms.ModelForm):
 #     class Meta:

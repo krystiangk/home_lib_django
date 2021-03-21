@@ -112,11 +112,11 @@ body {
     color: #f2cc8f;
     background: #353434;
     border-radius: 8px;
+    margin: 0rem 0.25rem 0.25rem 0.25rem;
 }
 
 .window_table {
     float: left;
-    margin-top: 0.5rem;
 }
 
 .right_table {
@@ -170,12 +170,11 @@ color: black;
     background-color: #f2f5f7;
     border-radius: 8px;
     min-width: 500px;
-    margin: 1rem;
 
 }
 
 .jumbotron {
-    background-color: #353434;
+    background-color: #504c4c;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
     width: 100%;
@@ -301,7 +300,10 @@ select:not(:valid) {
     border-radius: 0 !important;
 }
 
+.margins-around {
+    margin:  0.5rem 0.5rem 227px 0.5rem;
 
+}
 
 
 
@@ -312,8 +314,8 @@ select:not(:valid) {
 
 
 .sidebar-container {
-  /*position: fixed;*/
-  width: 200px;!important;
+  position: fixed;
+  width: 220px;!important;
   height: 100%;
   left: 0;
   overflow-x: hidden;
@@ -366,7 +368,7 @@ select:not(:valid) {
 }
 
 .sidebar-navigation li::before {
-  background-color: #424547;
+  background-color: #56595c;
   position: absolute;
   content: '';
   height: 100%;
@@ -396,3 +398,14 @@ select:not(:valid) {
 .content-container {
   padding-left: 220px;
 }
+
+ .col1 {
+     position: fixed;
+     width: 200px;
+ }
+ .col2 {
+     margin-left: 220px;
+     width: 100%;
+     position: relative;
+     overflow: auto;
+ }
