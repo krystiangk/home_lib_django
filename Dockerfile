@@ -1,4 +1,4 @@
-FROM python:3.8.8-alpine
+FROM python:3.8.0-alpine
 
 WORKDIR /app
 
@@ -6,12 +6,14 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV DEBUG 0
 
+
 # install psycopg2
 RUN apk update \
     && apk add --virtual build-deps gcc python3-dev musl-dev \
     && apk add postgresql-dev \
     && pip install psycopg2 \
     && apk del build-deps
+RUN apk add make automake gcc g++ subversion python3-dev
 
 
 # Install Python requirements.

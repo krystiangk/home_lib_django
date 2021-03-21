@@ -5,3 +5,4 @@ venv
 bfg-1.14.0.jar
 __pycache__/
 *.py[cod]
+.idea
