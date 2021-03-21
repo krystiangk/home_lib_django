@@ -12,7 +12,7 @@ class TestBookCreateForm(TestCase):
         self.form_data = {
             'title': 'Heat Transfer',
             'author': 'Yunus Cengel',
-            'year': 1001,
+            'year': 2000,
             'language': 'en',
             'created_by': self.user
         }
@@ -25,7 +25,7 @@ class TestBookCreateForm(TestCase):
     def test_book_create_form_invalid_data(self):
         form = BookCreateForm(data={})
         self.assertFalse(form.is_valid())
-        # 4 errors due to missing form data
+        # 4 errors due to missing form data, and one due to Key Error coming from clean function
         self.assertEquals(len(form.errors), 5)
 
     def test_book_failed_creation_of_duplicate_book(self):
@@ -42,7 +42,7 @@ class TestBookSearchForm(SimpleTestCase):
         self.form_data = {
             'title': 'Heat Transfer',
             'author': 'Yunus Cengel',
-            'year': 1001,
+            'year': 2000,
             'language': 'en',
         }
 

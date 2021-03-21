@@ -24,7 +24,7 @@ class TestCreateAndDeleteView(TestCase):
         self.form_data_1 = {
             'title': 'Heat Transfer',
             'author': 'Yunus Cengel',
-            'year': 1001,
+            'year': 2000,
             'language': 'en',
         }
 
@@ -55,7 +55,7 @@ class TestCreateAndDeleteView(TestCase):
 
         self.assertEquals(book.title, 'Heat Transfer')
         self.assertEquals(book.author, 'Yunus Cengel')
-        self.assertEquals(book.year, 1001)
+        self.assertEquals(book.year, 2000)
         self.assertEquals(book.language, 'en')
         self.assertEquals(book.created_by, self.user)
         self.assertEquals(book.read, False)
@@ -104,7 +104,7 @@ class TestCreateAndDeleteView(TestCase):
 
         self.assertEquals(book.title, 'Heat Transfer')
         self.assertEquals(book.author, 'Yunus Cengel')
-        self.assertEquals(book.year, 1001)
+        self.assertEquals(book.year, 2000)
         self.assertEquals(book.language, 'en')
         self.assertEquals(book.created_by, self.user)
         self.assertEquals(type(book.entry_timestamp), datetime.datetime)
@@ -128,19 +128,19 @@ class TestSearchAndReadViews(TestCase):
         self.form_data_1 = {
             'title': 'Heat Transfer',
             'author': 'Yunus Cengel',
-            'year': 1001,
+            'year': 2000,
             'language': 'en',
         }
         self.form_data_2 = {
             'title': "L'etranger",
             'author': 'Albert Camus',
-            'year': 1001,
+            'year': 2000,
             'language': 'fr',
         }
         self.form_data_3 = {
             'title': "Republic",
             'author': 'Plato',
-            'year': 1001,
+            'year': 2000,
             'language': 'en',
         }
         self.client.login(username='tom', password='testpass1')
@@ -173,7 +173,7 @@ class TestSearchAndReadViews(TestCase):
         self.assertEquals(len(response.context['object_list']), 0)
 
     def test_book_search_view_find_by_year_success(self):
-        response = self.client.get(self.search_url, {'year': 1001})
+        response = self.client.get(self.search_url, {'year': 2000})
 
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'home_lib/book_search.html')

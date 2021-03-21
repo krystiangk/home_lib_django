@@ -25,8 +25,8 @@ class BaseBookCreateForm(forms.ModelForm):
                 # This error will not be shown in the form,
                 # BookCreateView's form_invalid() method handles messages.
                 raise forms.ValidationError('Book already exists', code='exists')
-        except ValueError:
-            pass
+        except ValueError as e:
+            raise forms.ValidationError(e)
         return super().clean()
 
 
