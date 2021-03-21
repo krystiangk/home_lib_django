@@ -6,6 +6,7 @@ from .utils import LANGUAGE_CHOICES
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
 
+
 class Book(models.Model):
 
     class Meta:

@@ -321,7 +321,7 @@ select:not(:valid) {
   overflow-x: hidden;
   overflow-y: auto;
   background: #353434;
-  color: #fff;
+  color: rgba(255,255,255,.5);
 }
 
 .content-container {
@@ -353,7 +353,7 @@ select:not(:valid) {
 .sidebar-navigation li a {
   padding: 10px 15px 10px 30px;
   display: block;
-  color: #fff;
+  color: rgba(255,255,255,.5);
 }
 
 .sidebar-navigation li .fa {
@@ -387,7 +387,7 @@ select:not(:valid) {
 .sidebar-navigation .header {
   font-size: 12px;
   text-transform: uppercase;
-  background-color: #6c7b88;
+  background-color: #374b5d;
   padding: 10px 15px 10px 30px;
 }
 
@@ -399,13 +399,13 @@ select:not(:valid) {
   padding-left: 220px;
 }
 
- .col1 {
-     position: fixed;
-     width: 200px;
- }
- .col2 {
-     margin-left: 220px;
-     width: 100%;
-     position: relative;
-     overflow: auto;
- }
+ /*.col1 {*/
+ /*    position: fixed;*/
+ /*    width: 220px;*/
+ /*}*/
+ /*.col2 {*/
+ /*    margin-left: 220px;*/
+ /*    width: 100%;*/
+ /*    position: relative;*/
+ /*    overflow: auto;*/
+ /*}*/

@@ -35,7 +35,7 @@
                             <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Read Books</a>
                         <a class="nav-item nav-link mr-2" href={% url 'book-wishlist' %}>
                             <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> Wishlist</a>
-                        <a class="nav-item nav-link mr-2" href=#>
+                        <a class="nav-item nav-link mr-2" href="{% url 'stats' %}">
                             <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Statistics</a>
                     </div>
                     <div class="navbar-nav ml-auto">
@@ -54,7 +54,6 @@
         {% if not sidebar %}
             <div class="mb-2"></div>
             {% if messages and not sidebar %}
-
                 {% include "partials/messages_snippet.html" %}
             {% endif %}
         {% endif %}

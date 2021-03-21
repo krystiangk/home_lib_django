@@ -10,11 +10,10 @@
       type: "bar",
       data: {
          labels: [{% for item in qs %}"{% decode_language item.language %}",{% endfor %}],
-                   {#labels: ['a','b','c'],#}
 
          datasets: [
             {
-              label: "All books",
+              {#label: "English",#}
                 backgroundColor: [
                 'rgba(255, 99, 132, 0.4)',
                 'rgba(54, 162, 235, 0.4)',
@@ -32,7 +31,6 @@
                 'rgba(255, 159, 64, 1)'
             ],
               data: [{% for item in qs %}{{ item.count }},{% endfor %}]
-                              {#data: [3,4,1]#}
 
             }
          ]
@@ -40,20 +38,20 @@
 
       options: {
          title: {
-            text: "Total books by language",
+            text: "Read books by language",
             display: true,
 
          },
           responsive: false,
-              scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 1,
-                                    }
-                                }],
-                            },
-        legend: {
+          scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1,
+                    }
+                }],
+                },
+          legend: {
                 display: false
               },
       }

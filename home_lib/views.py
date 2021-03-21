@@ -32,7 +32,7 @@ class BookCreateOptionsView(LoginRequiredMixin, ListView):
         else:
             context['page_obj'] = p.get_page(1)
         # Sidebar flag added to change rendering of template messages, to not allow the
-        # sidebar to be pushed down by alert messages
+        # sidebar to be pushed down by alert messages. Logic implemented in 'base.html'
         context['sidebar'] = 1
         return context
 
