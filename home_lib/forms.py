@@ -1,7 +1,7 @@
 from django import forms
 from .models import Book, Wishlist
 from django.contrib import messages
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, int_list_validator
 
 
 class BaseBookCreateForm(forms.ModelForm):
@@ -72,4 +72,5 @@ class BookMarkReadForm(forms.ModelForm):
 
 
 class BookIsbnForm(forms.Form):
-    isbn13 = forms.CharField(max_length=13, min_length=13, validators=[RegexValidator(r'^\d{1,10}$')])
+    isbn13 = forms.CharField(max_length=13, min_length=13, validators=[RegexValidator(r'^\d{13}$'),
+                                                                       int_list_validator(sep='')])

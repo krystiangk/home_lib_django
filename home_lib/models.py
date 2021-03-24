@@ -22,17 +22,16 @@ class Book(models.Model):
     read_timestamp = models.DateTimeField(default=None, null=True)
 
     def get_absolute_url(self):
-        return reverse('book-create-options')
+        return reverse('book:book-create-options')
 
 
 class Wishlist(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
-    year = models.IntegerField()
+    year = models.IntegerField(validators=[MaxValueValidator(datetime.now().year), MinValueValidator(1400)])
     language = models.CharField(max_length=2, choices=LANGUAGE_CHOICES)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     entry_timestamp = models.DateTimeField(default=timezone.now)
 
-
     def get_absolute_url(self):
-        return reverse('book-wishlist')
+        return reverse('book:book-wishlist')

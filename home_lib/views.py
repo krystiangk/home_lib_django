@@ -44,9 +44,8 @@ class BaseBookCreateView(CreateView):
     def form_invalid(self, form):
         if form.has_error(NON_FIELD_ERRORS, 'exists'):
             messages.error(self.request, "This book already exists in the database.")
-            return redirect('book-create-options')
+            return redirect('book:book-create-options')
         return super().form_invalid(form)
-
 
     def form_valid(self, form):
         book = form.save(commit=False)
@@ -70,9 +69,8 @@ class BookCreateByIsbnView(LoginRequiredMixin, BaseBookCreateView):
                                                'year': book['year'], 'language': book['language']})
                 return render(self.request, 'home_lib/book_create_by_isbn.html', {'book': book, 'form': form})
         except KeyError:
-            print('This way')
             messages.info(self.request, "Sorry, this book has not been found in our databases, but you can still add it manually.")
-            return redirect('book-enter-isbn')
+            return redirect('book:book-enter-isbn')
 
 
 class BookEnterIsbnView(LoginRequiredMixin, FormView):
@@ -83,7 +81,7 @@ class BookEnterIsbnView(LoginRequiredMixin, FormView):
 class BookSearchView(LoginRequiredMixin, FormMixin, ListView):
     form_class = BookSearchForm
     model = Book
-    paginate_by = 15
+    paginate_by = 10
     template_name = 'home_lib/book_search.html'
 
     def get_queryset(self):
@@ -105,7 +103,7 @@ class BookSearchView(LoginRequiredMixin, FormMixin, ListView):
 class BookReadView(LoginRequiredMixin, ListView):
     model = Book
     template_name = 'home_lib/book_read.html'
-    paginate_by = 15
+    paginate_by = 10
 
     def get_queryset(self):
         object_list = Book.objects.filter(read=True).filter(created_by=self.request.user)
@@ -116,7 +114,7 @@ class BookDeleteView(LoginRequiredMixin, DeleteView):
     model = Book
 
     def get_success_url(self):
-        return reverse('book-search')
+        return reverse('book:book-search')
 
 
 class BookMarkReadView(LoginRequiredMixin, UpdateView):
@@ -129,10 +127,18 @@ class BookMarkReadView(LoginRequiredMixin, UpdateView):
         obj = self.model.objects.get(pk=self.kwargs.get('pk'))
         obj.read = not obj.read
         obj.save()
-        return redirect('book-search')
+        return redirect('book:book-search')
 
     def get_success_url(self):
-        return reverse('book-search')
+        return reverse('book:book-search')
+
+
+class BookWishlistDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = "home_lib/book_confirm_delete.html"
+    model = Wishlist
+
+    def get_success_url(self):
+        return reverse('book:book-wishlist')
 
 
 class BookWishlistView(LoginRequiredMixin, CreateView):

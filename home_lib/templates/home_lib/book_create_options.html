@@ -16,12 +16,12 @@
               <ul class="sidebar-navigation">
                 <li class="header">Add a new book</li>
                 <li>
-                  <a href="{% url 'book-enter-isbn' %}">
+                  <a href="{% url 'book:book-enter-isbn' %}">
                       <i class="fa fa-laptop" aria-hidden="true"></i>Add using ISBN search
                   </a>
                 </li>
                 <li>
-                  <a href="{% url 'book-create-manually' %}">
+                  <a href="{% url 'book:book-create-manually' %}">
                     <i class="fa fa-hand-paper-o" aria-hidden="true"></i>Add manually
                   </a>
                 </li>
@@ -66,25 +66,10 @@
                                      {% endfor %}
                                 </tbody>
                             </table>
+
                             {% if number_of_pages > 1 %}
-                              {% if page_obj.has_previous %}
-                                <a class="btn btn-outline-dark mb-4" href="?page=1">First</a>
-                                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                              {% endif %}
-
-                              {% for num in page_obj.paginator.page_range %}
-                                {% if page_obj.number == num %}
-                                  <a class="btn btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
-                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                  <a class="btn btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
-                                {% endif %}
-                              {% endfor %}
-
-                              {% if page_obj.has_next %}
-                                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
-                                <a class="btn btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-                              {% endif %}
-                            {%  endif %}
+                                {% include "partials/book_pagination_snippet.html" %}
+                            {% endif %}
 
                         </div>
                     </section>

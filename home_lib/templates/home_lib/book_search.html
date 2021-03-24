@@ -51,7 +51,7 @@
                                             <td>{{book.author}}</td>
                                             <td>{{book.year}}</td>
                                             <td>{{book.get_language_display}}</td>
-                                            <td><a  href={% url 'book-mark' pk=book.id %}
+                                            <td><a  href={% url 'book:book-mark' pk=book.id %}
 
                                                         {% if book.read %}
                                                         class="mark_unread_link">Mark as unread
@@ -59,36 +59,14 @@
                                                         class="mark_read_link">Mark as read
                                                         {% endif %}
                                                     </a></td>
-                                            <td><a class="delete_link" href={% url 'book-delete' pk=book.id %}>Delete</a></td>
+                                            <td><a class="delete_link" href={% url 'book:book-delete' pk=book.id %}>Delete</a></td>
                                         </tr>
                                  {% endfor %}
                             </tbody>
                         </table>
-
-                       {% if is_paginated %}
-
-                          {% if page_obj.has_previous %}
-                            <a class="btn btn-outline-dark mb-4" href="?{% url_replace page=1 %}">First</a>
-                            <a class="btn btn-outline-dark mb-4" href="?{% url_replace page=page_obj.previous_page_number %}">Previous</a>
-                          {% endif %}
-
-                          {% for num in page_obj.paginator.page_range %}
-                            {% if page_obj.number == num %}
-                              <a class="btn btn-dark mb-4" href="?{% url_replace page=num %}">{{ num }}</a>
-                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                              <a class="btn btn-outline-dark mb-4" href="?{% url_replace page=num %}">{{ num }}</a>
-                            {% endif %}
-                          {% endfor %}
-
-                          {% if page_obj.has_next %}
-                            <a class="btn btn-outline-dark mb-4" href="?{% url_replace page=page_obj.next_page_number %}">Next</a>
-                            <a class="btn btn-outline-dark mb-4" href="?{% url_replace page=page_obj.paginator.num_pages %}">Last</a>
-                          {% endif %}
-
-                       {% endif %}
-
-
-
+                        {% if is_paginated %}
+                            {% include "partials/book_pagination_snippet.html" %}
+                        {% endif %}
                     </div>
                 </section>
             </div>

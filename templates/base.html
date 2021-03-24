@@ -20,23 +20,23 @@
     <div class="content container">
         <nav class="navbar navbar-expand-lg navbar-dark navcolor mb-0">
             <div class="container">
-                <a class="navbar-brand ml-3 mr-3" href="{% url 'home' %}">Home Library</a>
+                <a class="navbar-brand ml-3 mr-3" href="{% url 'book:home' %}">Home Library</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                         aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link mr-2" href="{% url 'book-create-options' %}">
+                        <a class="nav-item nav-link mr-2" href="{% url 'book:book-create-options' %}">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>New Book</a>
-                         <a class="nav-item nav-link mr-2" href="{% url 'book-search' %}">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</a>
-                        <a class="nav-item nav-link mr-2" href="{% url 'book-read' %}">
+                         <a class="nav-item nav-link mr-2" href="{% url 'book:book-search' %}">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Your Bookshelf</a>
+                        <a class="nav-item nav-link mr-2" href="{% url 'book:book-read' %}">
                             <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Read Books</a>
-                        <a class="nav-item nav-link mr-2" href={% url 'book-wishlist' %}>
+                        <a class="nav-item nav-link mr-2" href={% url 'book:book-wishlist' %}>
                             <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> Wishlist</a>
-                        <a class="nav-item nav-link mr-2" href="{% url 'stats' %}">
-                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Statistics</a>
+                        <a class="nav-item nav-link mr-2" href="{% url 'chart:stats' %}">
+                            <span class="fa fa-bar-chart" aria-hidden="true" style="font-size: 18px;"></span> Statistics</a>
                     </div>
                     <div class="navbar-nav ml-auto">
                         {% if user.is_authenticated %}

@@ -8,7 +8,7 @@ import datetime
 class TestHomeView(SimpleTestCase):
 
     def test_home_GET(self):
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('book:home'))
 
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'home_lib/home.html')
@@ -18,8 +18,11 @@ class TestCreateAndDeleteView(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user('tom', 'tom@tom.com', password='testpass1')
-        self.create_book_url = reverse('book-create-manually')
+        self.username = 'tom'
+        self.password = 'testpass1'
+        self.user = User.objects.create_user(self.username, 'tom@tom.com', password=self.password)
+        self.client.login(username=self.username, password=self.password)
+        self.create_book_url = reverse('book:book-create-manually')
 
         self.form_data_1 = {
             'title': 'Heat Transfer',
@@ -29,23 +32,13 @@ class TestCreateAndDeleteView(TestCase):
         }
 
     def test_book_create_view_GET(self):
-        self.client.login(username='tom', password='testpass1')
-
         response = self.client.get(self.create_book_url)
 
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'home_lib/book_create_manually.html')
 
     def test_book_create_view_POST_success(self):
-        self.client.login(username='tom', password='testpass1')
-
-        # from django.contrib import auth
-        # user_1 = auth.get_user(self.client)
-        # if user_1.is_authenticated:
-        #     print('user successfully authenticated')
-
-        response = self.client.post('/book/create-manually', data=self.form_data_1)
-
+        response = self.client.post(self.create_book_url, data=self.form_data_1)
         book = Book.objects.last()
         num_of_books = Book.objects.all().count()
 
@@ -64,36 +57,32 @@ class TestCreateAndDeleteView(TestCase):
 
         self.assertRedirects(
                 response,
-                reverse('book-create-options'),
+                reverse('book:book-create-options'),
                 status_code=302,
                 target_status_code=200
             )
 
     def test_delete_view(self):
-        self.client.login(username='tom', password='testpass1')
-        self.client.post('/book/create-manually', data=self.form_data_1)
-        response = self.client.get('/book/new')
+        self.client.post(self.create_book_url, data=self.form_data_1)
+        response = self.client.get(reverse('book:book-create-options'))
+
         self.assertEquals(len(response.context['page_obj']), 1)
 
         book = Book.objects.last()
-        self.client.post(reverse('book-delete', args=(book.id,)), follow=True)
-        response = self.client.get('/book/new')
+        self.client.post(reverse('book:book-delete', args=(book.id,)), follow=True)
+        response = self.client.get(reverse('book:book-create-options'))
 
         self.assertEquals(len(response.context['page_obj']), 0)
 
     def test_book_wishlist_create_view_GET(self):
-        self.client.login(username='tom', password='testpass1')
-
-        response = self.client.get(reverse('book-wishlist'))
+        response = self.client.get(reverse('book:book-wishlist'))
 
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'home_lib/book_wishlist.html')
 
 
     def test_book_wishlist_view_POST_success(self):
-        self.client.login(username='tom', password='testpass1')
-
-        response = self.client.post(reverse('book-wishlist'), data=self.form_data_1)
+        response = self.client.post(reverse('book:book-wishlist'), data=self.form_data_1)
 
         book = Wishlist.objects.last()
         num_of_books = Wishlist.objects.all().count()
@@ -111,7 +100,7 @@ class TestCreateAndDeleteView(TestCase):
 
         self.assertRedirects(
                 response,
-                reverse('book-wishlist'),
+                reverse('book:book-wishlist'),
                 status_code=302,
                 target_status_code=200
             )
@@ -123,8 +112,9 @@ class TestSearchAndReadViews(TestCase):
         self.client = Client()
         self.user = User.objects.create_user('tom', 'tom@tom.com', password='testpass1')
         self.user_2 = User.objects.create_user('bill', 'bill@deal.com', password='testpass2')
-        self.search_url = reverse('book-search')
-        self.read_url = reverse('book-read')
+        self.create_book_url = reverse('book:book-create-manually')
+        self.search_url = reverse('book:book-search')
+        self.read_url = reverse('book:book-read')
         self.form_data_1 = {
             'title': 'Heat Transfer',
             'author': 'Yunus Cengel',
@@ -144,9 +134,9 @@ class TestSearchAndReadViews(TestCase):
             'language': 'en',
         }
         self.client.login(username='tom', password='testpass1')
-        self.client.post('/book/create-manually', data=self.form_data_1)
-        self.client.post('/book/create-manually', data=self.form_data_2)
-        self.client.post('/book/create-manually', data=self.form_data_3)
+        self.client.post(self.create_book_url, data=self.form_data_1)
+        self.client.post(self.create_book_url, data=self.form_data_2)
+        self.client.post(self.create_book_url, data=self.form_data_3)
 
     def test_book_search_view_find_by_author_success(self):
         response = self.client.get(self.search_url, {'author': 'yunus'})
@@ -193,7 +183,7 @@ class TestSearchAndReadViews(TestCase):
 
     def test_book_search_view_show_only_books_of_logged_in_user_success(self):
         self.client.login(username='bill', password='testpass2')
-        self.client.post('/book/create-manually', data={'title': 'Trzy po trzy',
+        self.client.post(self.create_book_url, data={'title': 'Trzy po trzy',
                                             'author': 'Fredro',
                                             'year': 1880,
                                             'language': 'pl'})
@@ -209,6 +199,6 @@ class TestSearchAndReadViews(TestCase):
     def test_book_mark_read_view(self):
         book = Book.objects.get(title="Republic")
 
-        self.client.post(reverse('book-mark',  args=(book.id,)))
+        self.client.post(reverse('book:book-mark',  args=(book.id,)))
         response = self.client.get(self.read_url)
         self.assertEquals(len(response.context['object_list']), 1)
